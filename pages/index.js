@@ -33,7 +33,7 @@ export default function Home() {
       <Map/>
       <ActionItems>
         <Header>
-          <UberLogo src="https://i.ibb.co/84stgjq/uber-technologies-new-20218114.jpg"/>
+          <UberLogo src="https://dynamic.brandcrowd.com/preview/logodraft/45831257-9627-47fd-9a16-e3320ccbfc4f/image/large.png"/>
           <Profile>
             <Name>{User && User.name}</Name>
             <UserImage src={User && User.photoUrl}  onClick = {() => signOut(auth) } />
@@ -70,7 +70,7 @@ const Header = tw.div`
   flex justify-between items-center
 `
 const UberLogo = tw.img`
-  h-28
+  h-20 rounded 
 `
 const Profile = tw.div`
   flex items-center
