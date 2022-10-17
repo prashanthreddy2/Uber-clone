@@ -4,17 +4,23 @@ import { carList } from '../data/carList'
 
 const RideSelector = ({pickupCoordinates, dropOffCoordinates}) => {
 
-    const [rideDuration, setrideDuration] = useState(0)
-
-    useEffect(() => {
-        fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${pickupCoordinates[0]},${pickupCoordinates[1]};${dropOffCoordinates[0]},${dropOffCoordinates[1]}?access_token=pk.eyJ1IjoiYXNpZmtoYW4wNDAxIiwiYSI6ImNrdm04d3J6eDA4bTEydm1udXF0M3VxazEifQ.5JS8d3-U7EgDL2USiRZ_4g`
+    const [rideDuration, setrideDuration] = useState(9999999)
+    const callApi = async () => {
+        await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${pickupCoordinates[0]},${pickupCoordinates[1]};${dropOffCoordinates[0]},${dropOffCoordinates[1]}?access_token=pk.eyJ1IjoiYXNpZmtoYW4wNDAxIiwiYSI6ImNrdm04d3J6eDA4bTEydm1udXF0M3VxazEifQ.5JS8d3-U7EgDL2USiRZ_4g`
         )
         .then(response => response.json())
         .then(data=>{
-            console.log(data)
-            setrideDuration(data.routes[0].duration/100)
+            console.log("This is the response---",data.routes[0])
+            if(data.routes[0].distance != 0){
+                setrideDuration(Math.min(data.routes[0].distance/1000,rideDuration))
+            }
         })
-
+        .catch(err => {
+            console.log("This is the error",err)
+        })
+    }
+    useEffect(() => {
+        callApi()
     }, [pickupCoordinates, dropOffCoordinates])
 
     return (
@@ -29,6 +35,7 @@ const RideSelector = ({pickupCoordinates, dropOffCoordinates}) => {
                             <Time>5min away</Time>
                         </CarDetails>
                         <Price>{ "Rs " + (rideDuration*car.multiplier).toFixed(2)}</Price>
+                        {console.log("Ride Duration",rideDuration)}
                     </Car>
                 ))}
                 
